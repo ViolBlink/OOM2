@@ -60,6 +60,9 @@ int main()
     ifstream Read("Config.txt");
     ofstream Write("Data.txt");
 
+    ofstream Writex("x.txt");
+    ofstream Writey("y.txt");
+
     // Кол-во точек по x, y, t соотвественно
     double Nx, Ny, Nt;
     // Предель по времени и координатам
@@ -126,8 +129,8 @@ int main()
     vector<double> Dy(Ny + 1);
 
     // Инициализация данных в момент времени t = 0
-    for(int i = 0; i < Nx; i++){
-        for(int j = 0; j < Ny; j++)
+    for(int i = 0; i <= Nx; i++){
+        for(int j = 0; j <= Ny; j++)
         {
             Lattis[i][j][0] = cos(3 * (-hx/2 + i*hx)) * sin(4 * hy * j);
         }
@@ -140,7 +143,7 @@ int main()
         for(int m = 1; m < Ny; m++)
         {
             // Задание матрицы системы
-            for(int i = 1; i < Nx - 1; i++)
+            for(int i = 1; i < Nx; i++)
             {
                 Ax[i][i - 1] = (a * a) / (hx * hx);
 				Ax[i][i] = -(2 * a * a) / (hx * hx) - 2 / t;
@@ -154,9 +157,10 @@ int main()
             Ax[Nx][Nx - 1] = -1;
             
             // Задаём правую часть уравнения
-            for(int i = 1; i < Nx - 1; i++) Dx[i] = -(2 / t) * Lattis[i][m][j] -
-            - ((a * a) / (hy * hy)) * (Lattis[i][m + 1][j] -
-            - 2 * Lattis[i][m][j] + Lattis[i][m - 1][j]);
+            for(int i = 1; i < Nx; i++) Dx[i] = -(2 / t) * Lattis[i][m][j] - ((a * a) / (hy * hy)) * (Lattis[i][m + 1][j] - 2 * Lattis[i][m][j] + Lattis[i][m - 1][j]);
+
+            Dx[0] = 0;
+            Dx[Nx] = 0;
 
             X = solveMatrix(Ax, X, Dx);
 
@@ -193,9 +197,7 @@ int main()
             }
 
             // Задаём правую часть уравнения
-            for(int i = 1; i < Ny - 1; i++) Dy[i] = -(2 / t) * TransLay[n][i] -
-            - ((a * a) / (hx * hx)) * (TransLay[n + 1][i] - 2 * TransLay[n][i] +
-            + TransLay[n - 1][i]);
+            for(int i = 1; i < Ny; i++) Dy[i] = -(2 / t) * TransLay[n][i] - ((a * a) / (hx * hx)) * (TransLay[n + 1][i] - 2 * TransLay[n][i] + TransLay[n - 1][i]);
 
             // Первое и последенее значение правой части
             Dy[0] = 0;
@@ -221,5 +223,13 @@ int main()
     vector<double> times(1);
     times[0] = 3;
 
-    
+    for(int i = 0; i <= Nx; i++)
+    {
+        for(int j = 0; j <= Ny; j++) 
+        {
+            Write << Lattis[i][j][3] << "\n";
+            Writex << -hx/2 + i * hx << "\n";
+            Writey << j * hy << "\n";
+        }
+    }
 }
