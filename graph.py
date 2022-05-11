@@ -16,7 +16,7 @@ Ny = int(Arr[1].split(" ")[2]) # Считывем Ny
 
 T = []
 
-for i in range(6, len(Arr)):
+for i in range(8, len(Arr)):
     T.append(int(Arr[i]))
 
 f.close()
