@@ -220,16 +220,32 @@ int main()
 		}
     }
 
-    vector<double> times(1);
-    times[0] = 3;
+    int i = 0;
+    vector<double> times(0);
 
-    for(int i = 0; i <= Nx; i++)
+    // шаг для записи данных
+    int dx;
+    int dy;
+
+    Read >> str >> str;
+
+    Read >> dx; // Считываем e
+
+    Read >> str >> str;
+
+    Read >> dy; //Считываем a
+
+    int Ts;
+    while(Read >> Ts) times.push_back(Ts);
+
+    for(int i = 0; i <= Nx; i += dx)
     {
-        for(int j = 0; j <= Ny; j++) 
+        for(int j = 0; j <= Ny; j += dy) 
         {
             Write << Lattis[i][j][3] << "\n";
+            Writey << j * hy << "\n"; 
             Writex << -hx/2 + i * hx << "\n";
-            Writey << j * hy << "\n";
         }
+       
     }
 }

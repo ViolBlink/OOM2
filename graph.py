@@ -1,47 +1,85 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
+
+
 
 f = open('Config.txt')
 
 Arr = f.read()
 Arr = Arr.split("\n")
 
-N = int(Arr[0].split(" ")[2])
+""" Считываем параметры """
+Nx = int(Arr[0].split(" ")[2]) # Считывем Nx
 
-hx = np.pi/3/(N - 1)
+Ny = int(Arr[1].split(" ")[2]) # Считывем Ny
 
-J = int(Arr[1].split(" ")[2])
+T = []
+
+for i in range(6, len(Arr)):
+    T.append(int(Arr[i]))
 
 f.close()
 
-""" Численый счет """
+""" Считываем данные """
 
 f = open('Data.txt')
 
-Lattis = np.zeros((J + 1, N + 1))
+Lattis = np.zeros((Nx + 1, Ny + 1))
 Arr = []
 
 for x in f:
     Arr.append(float(x))
 
-count = 0
+# count = 0
 
-for j in range(N):
-    for q in range(J):
-        Lattis[j][q] = Arr[count]
-        count = count + 1
+# for j in range(Nx):
+#     for q in range(Ny):
+#         Lattis[j][q] = Arr[count]
+#         count = count + 1
 
-X = np.linspace(-hx/2, np.pi/3 + hx/2, N + 1)
-Y = np.linspace(0, np.pi/2, J + 1)
+f.close()
 
-gx, gt = np.meshgrid(X, Y)
+f = open('x.txt')
 
-fig3 = plt.figure(figsize=(10, 10))
-ax3 = fig3.add_subplot(111, projection='3d')
-ax3.plot_surface(gx, gt, Lattis, rstride=10,cstride=10)
-ax3.set_title('Численное решение')
-ax3.set_ylabel('Координата y')
-ax3.set_xlabel('Координата x')
-ax3.set_zlabel('U(x,t)')
+X = []
+
+for x in f:
+    X.append(float(x))
+
+f.close()
+
+f = open('y.txt')
+
+Y = []
+
+for y in f:
+    Y.append(float(y))
+
+# X = np.linspace(-(np.pi)/(2*(Nx - 1)), np.pi/3, Nx + 1)
+# Y = np.linspace(0, np.pi/2, Ny + 1)
+
+gx = np.ravel(X)
+gy = np.ravel(Y)
+
+# theta = 2 * np.pi * np.random.random(1000)
+
+# r = 6 * np.random.random(1000)
+# x = np.ravel(r * np.sin(theta))
+# y = np.ravel(r * np.cos(theta))
+
+# z = np.sin(np.sqrt(x ** 2 + y ** 2))
+
+# ax = plt.axes(projection='3d')
+# ax.plot_trisurf(x, y, z,
+#                 cmap='viridis', edgecolor='none')
+
+fig1 = plt.figure(figsize=(110, 110))
+ax1 = fig1.add_subplot(projection='3d')
+ax1.plot_trisurf(X, Y, Arr, cmap=cm.jet, edgecolor='none')
+ax1.set_title('Численное решение')
+ax1.set_ylabel('Координата y')
+ax1.set_xlabel('Координата x')
+ax1.set_zlabel('U(x,t)')
 
 plt.show()
