@@ -58,7 +58,6 @@ int main()
 {
     // Потоки считывания записи
     ifstream Read("Config.txt");
-    ofstream Write("Data.txt");
 
     ofstream Writex("x.txt");
     ofstream Writey("y.txt");
@@ -219,14 +218,12 @@ int main()
 			Lattis[Nx][i][j + 1] = Lattis[Nx - 1][i][j + 1];
 		}
     }
-
-    int i = 0;
-    vector<double> times(0);
-
+    
     // шаг для записи данных
     int dx;
     int dy;
 
+{
     Read >> str >> str;
 
     Read >> dx; // Считываем e
@@ -234,15 +231,29 @@ int main()
     Read >> str >> str;
 
     Read >> dy; //Считываем a
+}
 
+    // Считываем моменты времени для записи
     int Ts;
-    while(Read >> Ts) times.push_back(Ts);
+    string name;
+    vector<double> times(0);
+    vector<ofstream> write_data(0);
+    while(Read >> Ts) 
+    {
+        name = "data_";
+        times.push_back(Ts);
+        name += std::to_string(Ts) + ".txt";
+        write_data.push_back(ofstream(name));
+    }
 
     for(int i = 0; i <= Nx; i += dx)
     {
         for(int j = 0; j <= Ny; j += dy) 
         {
-            Write << Lattis[i][j][3] << "\n";
+            for(int q = 0; q < times.size(); q++)
+            {
+                write_data[q] << Lattis[i][j][times[q]] << "\n";
+            }
             Writey << j * hy << "\n"; 
             Writex << -hx/2 + i * hx << "\n";
         }
