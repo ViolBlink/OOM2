@@ -21,38 +21,7 @@ using std::vector;
 using std::string;
 
 
-/**
- * A - матрица системы
- * X - ответ
- * D - правая часть
- */
-vector<double> solveMatrix(vector<vector<double>> A, vector<double> X, vector<double> D)
-{
-    int n = X.size();
-
-    vector<double> Xi(n + 1);
-	vector<double> Eta(n + 1);
-
-	Xi[1] = A[0][1] / (-A[0][0]);
-	Eta[1] = -D[0] / (-A[0][0]);
-
-	for (int i = 2; i < n; i++)
-	{
-		Xi[i] = A[i - 1][i] / ((-A[i - 1][i - 1]) - A[i - 1][i - 2] * Xi[i - 1]);
-		Eta[i] = (A[i - 1][i - 2] * Eta[i - 1] - D[i - 1]) / ((-A[i - 1][i - 1]) - A[i - 1][i - 2] * Xi[i - 1]);
-	}
-
-	Xi[n] = 0;
-	Eta[n] = (A[n - 1][n - 2] * Eta[n - 1] - D[n - 1]) / ((-A[n - 1][n - 1]) - A[n - 1][n - 2] * Xi[n - 1]);
-
-	X[n - 1] = Eta[n];
-	for (int i = n - 2; i >= 0; i--)
-	{
-		X[i] = Xi[i + 1] * X[i + 1] + Eta[i + 1];
-	}
-
-	return X;
-}
+vector<double> solveMatrix(vector<vector<double>>, vector<double>, vector<double>);
 
 int main()
 {
@@ -265,4 +234,37 @@ int main()
         }
        
     }
+}
+
+/**
+ * A - матрица системы
+ * X - ответ
+ * D - правая часть
+ */
+vector<double> solveMatrix(vector<vector<double>> A, vector<double> X, vector<double> D)
+{
+    int n = X.size();
+
+    vector<double> Xi(n + 1);
+	vector<double> Eta(n + 1);
+
+	Xi[1] = A[0][1] / (-A[0][0]);
+	Eta[1] = -D[0] / (-A[0][0]);
+
+	for (int i = 2; i < n; i++)
+	{
+		Xi[i] = A[i - 1][i] / ((-A[i - 1][i - 1]) - A[i - 1][i - 2] * Xi[i - 1]);
+		Eta[i] = (A[i - 1][i - 2] * Eta[i - 1] - D[i - 1]) / ((-A[i - 1][i - 1]) - A[i - 1][i - 2] * Xi[i - 1]);
+	}
+
+	Xi[n] = 0;
+	Eta[n] = (A[n - 1][n - 2] * Eta[n - 1] - D[n - 1]) / ((-A[n - 1][n - 1]) - A[n - 1][n - 2] * Xi[n - 1]);
+
+	X[n - 1] = Eta[n];
+	for (int i = n - 2; i >= 0; i--)
+	{
+		X[i] = Xi[i + 1] * X[i + 1] + Eta[i + 1];
+	}
+
+	return X;
 }
