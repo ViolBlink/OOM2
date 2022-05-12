@@ -59,8 +59,8 @@ int main()
     // Потоки считывания записи
     ifstream Read("Config.txt");
 
-    ofstream Writex("x.txt");
-    ofstream Writey("y.txt");
+    ofstream Writex("data\\x.txt");
+    ofstream Writey("data\\y.txt");
 
     // Кол-во точек по x, y, t соотвественно
     double Nx, Ny, Nt;
@@ -238,12 +238,16 @@ int main()
     string name;
     vector<double> times(0);
     vector<ofstream> write_data(0);
+    vector<ofstream> write_analit(0);
+    vector<ofstream> write_diff(0);
     while(Read >> Ts) 
     {
-        name = "data_";
+        name = "data\\data_";
         times.push_back(Ts);
-        name += std::to_string(Ts) + ".txt";
-        write_data.push_back(ofstream(name));
+        name += std::to_string(Ts);
+        write_data.push_back(ofstream(name + ".txt"));
+        write_analit.push_back(ofstream(name + "_a.txt"));
+        write_diff.push_back(ofstream(name + "_d.txt"));
     }
 
     for(int i = 0; i <= Nx; i += dx)
@@ -253,6 +257,8 @@ int main()
             for(int q = 0; q < times.size(); q++)
             {
                 write_data[q] << Lattis[i][j][times[q]] << "\n";
+                write_analit[q] << cos(3 * (-hx/2 + i*hx)) * sin(4 * hy * j) * exp(-25 * t * times[q]) << "\n";
+                write_diff[q] << cos(3 * (-hx/2 + i*hx)) * sin(4 * hy * j) * exp(-25 * t * times[q]) - Lattis[i][j][times[q]] << "\n";
             }
             Writey << j * hy << "\n"; 
             Writex << -hx/2 + i * hx << "\n";
